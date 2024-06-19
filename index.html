@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사용자 맞춤 식단과 운동 계획</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    h1, form {
+        text-align: center;
+    }
+    input[type="number"] {
+        width: 100%;
+        padding: 8px;
+        margin: 5px 0;
+        box-sizing: border-box;
+    }
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    #result {
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body>
+    <h1>사용자 맞춤 식단과 운동 계획</h1>
+    <form id="inputForm">
+        <label for="height">키(cm):</label>
+        <input type="number" id="height" name="height" required><br>
+        
+        <label for="weight">몸무게(kg):</label>
+        <input type="number" id="weight" name="weight" required><br>
+        
+        <label for="muscle">근육량(kg):</label>
+        <input type="number" id="muscle" name="muscle"><br>
+        
+        <label for="bodyFat">체지방률(%):</label>
+        <input type="number" id="bodyFat" name="bodyFat"><br>
+        
+        <button type="submit">계획 만들기</button>
+    </form>
+
+    <div id="result" style="display: none;">
+        <!-- 결과가 여기에 나타날 수 있습니다. -->
+    </div>
+
+    <script>
+        document.getElementById("inputForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            // 사용자 입력 가져오기
+            const height = parseFloat(document.getElementById("height").value);
+            const weight = parseFloat(document.getElementById("weight").value);
+            const muscle = parseFloat(document.getElementById("muscle").value) || 0;
+            const bodyFat = parseFloat(document.getElementById("bodyFat").value) || 0;
+
+            // 간단한 식단과 운동 계획 만들기 함수
+            function createPlan(height, weight, muscle, bodyFat) {
+                let workoutPlan = [];
+                let dietPlan = [];
+
+                // 체지방률에 따라 운동 계획 설정
+                if (bodyFat < 15) {
+                    workoutPlan.push("팔굽혀펴기 3세트 15회");
+                    workoutPlan.push("스쿼트 3세트 12회");
+                    workoutPlan.push("플랭크 1분 유지");
+                } else {
+                    workoutPlan.push("윗몸 일으키기 3세트 20회");
+                    workoutPlan.push("런지 3세트 10회 (각 다리)");
+                    workoutPlan.push("레그 레이즈 3세트 15회");
+                }
+
+                // 근육량에 따라 식단 설정
+                if (muscle >= 50) {
+                    dietPlan.push("아침: 계란 오믈렛과 오트밀");
+                    dietPlan.push("점심: 그릴 치킨 샐러드");
+                    dietPlan.push("간식: 그릭 요거트와 과일");
+                    dietPlan.push("저녁: 소고기 스테이크와 채소");
+                } else {
+                    dietPlan.push("아침: 스무디와 과일");
+                    dietPlan.push("점심: 치킨 샐러드");
+                    dietPlan.push("간식: 견과류와 요구르트");
+                    dietPlan.push("저녁: 생선과 채소");
+                }
+
+                return { workoutPlan, dietPlan };
+            }
+
+            // 계획 생성 및 화면에 출력
+            const { workoutPlan, dietPlan } = createPlan(height, weight, muscle, bodyFat);
+            const resultDiv = document.getElementById("result");
+            resultDiv.style.display = "block";
+            resultDiv.innerHTML = `<h2>맞춤 운동 계획</h2>`;
+            resultDiv.innerHTML += `<ul>`;
+            workoutPlan.forEach(item => {
+                resultDiv.innerHTML += `<li>${item}</li>`;
+            });
+            resultDiv.innerHTML += `</ul>`;
+            resultDiv.innerHTML += `<h2>맞춤 식단</h2>`;
+            resultDiv.innerHTML += `<ul>`;
+            dietPlan.forEach(item => {
+                resultDiv.innerHTML += `<li>${item}</li>`;
+            });
+            resultDiv.innerHTML += `</ul>`;
+        });
+    </script>
+</body>
+</html>
